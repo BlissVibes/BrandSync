@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { LayoutDashboard, TrendingUp, UserSearch, Sun, Moon, Zap } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, UserSearch, Sun, Moon, Zap, FlaskConical, X } from 'lucide-react';
 import { Toaster } from 'sonner';
 import Dashboard from './components/Dashboard/Dashboard';
 import SEOAnalyzer from './components/SEOAnalyzer/SEOAnalyzer';
 import VetClient from './components/VetClient/VetClient';
+import { IS_MOCK_MODE } from './services/api';
 
 const TABS = [
   { id: 'dashboard', label: 'My Dashboard', icon: LayoutDashboard },
@@ -16,6 +17,7 @@ export default function App() {
   const [dark, setDark] = useState(() => {
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches || false;
   });
+  const [demoBannerDismissed, setDemoBannerDismissed] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark);
@@ -24,6 +26,22 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
       <Toaster richColors position="top-right" />
+
+      {/* Demo mode banner */}
+      {IS_MOCK_MODE && !demoBannerDismissed && (
+        <div className="bg-brand-600 text-white text-xs px-4 py-2 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 flex-1 justify-center">
+            <FlaskConical className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>
+              <strong>Demo mode</strong> — running with embedded seed data. No backend required.
+              {' '}To connect a live backend, set the <code className="bg-white/20 px-1 rounded">VITE_API_URL</code> secret in your GitHub repository settings.
+            </span>
+          </div>
+          <button onClick={() => setDemoBannerDismissed(true)} className="flex-shrink-0 hover:opacity-75">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Top navbar */}
       <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
