@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, Search, BarChart2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { TrendingUp, BarChart2, AlertTriangle, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import CorrelationChart from '../shared/CorrelationChart';
 import SeverityBadge from '../shared/SeverityBadge';
 import CategoryChips from '../shared/CategoryChips';
@@ -159,6 +159,21 @@ export default function SEOAnalyzer() {
               <span>0 (Neutral)</span>
               <span>+1 (Positive)</span>
             </div>
+
+            {/* Data source badge */}
+            {result.correlation?.source && (
+              <div className="flex items-center gap-1.5 mt-3">
+                {result.correlation.source === 'google_trends' ? (
+                  <span className="inline-flex items-center gap-1 text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
+                    <Wifi className="w-3 h-3" /> Google Trends · relative interest (0–100)
+                  </span>
+                ) : result.correlation.source === 'mock' ? (
+                  <span className="inline-flex items-center gap-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full">
+                    <WifiOff className="w-3 h-3" /> Simulated data — Google Trends unavailable
+                  </span>
+                ) : null}
+              </div>
+            )}
 
             {/* Trend chart */}
             {result.correlation?.clientData?.length > 0 && (
